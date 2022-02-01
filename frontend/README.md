@@ -4,4 +4,6 @@
 
 Все запросы на авторизацию, регистрацию и проверку токена должны работать через сервис `https://auth.nomoreparties.co`. Остальные запросы, не относящиеся к этой проектной работе могут быть к бэкенду из предыдущих спринтов.
 
-Успехов!
+Frontend Hosting: https://leontevsky.nomoredomains.work/
+Server URL: https://leontevskyback.nomoredomains.work/
+Public IP Address: 51.250.6.129
