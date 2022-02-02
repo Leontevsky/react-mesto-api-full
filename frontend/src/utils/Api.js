@@ -115,9 +115,8 @@ class Api {
 }
 
 const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-24',
+  url: 'https://leontevskyback.nomoredomains.work',
   headers: {
-    authorization: 'eee6724a-7558-44e3-b80b-1f5173ed3e41',
     'content-type': 'application/json', // в каком виде возвращаются данные
   },
 });
