@@ -124,14 +124,15 @@ const login = (req, res, next) => {
     .select("+password")
     .then((user) => {
       if (!user) {
-        throw new BadAuth("Нет пользователя с таким email");
+        throw new NotFound("Нет пользователя с таким email");
       } else {
         bcrypt.compare(password, user.password, (error, isValid) => {
           if (error) {
-            throw new BadAuth("Неверный запрос");
+            throw new BadRequest("Неверный запрос");
           }
           if (!isValid) {
-            throw new BadAuth("Неправильный пароль");
+            //throw new BadAuth("Неправильный пароль");
+            return next(new BadAuth("Неправильный пароль"));
           }
           if (isValid) {
             const token = jwt.sign(
