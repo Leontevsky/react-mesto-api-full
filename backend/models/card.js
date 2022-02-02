@@ -1,6 +1,6 @@
 // директория models/card.js содержит файлы описания схемы карточки
-const mongoose = require('mongoose');
-const validator = require('validator');
+const mongoose = require("mongoose");
+const validator = require("validator");
 
 const cardSchema = new mongoose.Schema({
   // name — имя карточки, строка от 2 до 30 символов, обязательное поле;
@@ -16,20 +16,20 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (value) => validator.isURL(value),
-      message: 'Невалидный link',
+      message: "Невалидный link",
     },
   },
   // owner — ссылка на модель автора карточки, тип ObjectId, обязательное поле;
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'user',
+    ref: "user",
   },
   // likes — список лайк-их пост пользователей, массив ObjectId,
   // по умолчанию — пустой массив (поле default);
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: "user",
     default: [],
   }],
   // createdAt — дата создания, тип Date, значение по умолчанию Date.now.
@@ -40,4 +40,4 @@ const cardSchema = new mongoose.Schema({
 });
 
 // создаём модель и экспортируем её
-module.exports = mongoose.model('card', cardSchema); // Мы передали методу mongoose.model два аргумента: имя модели и схему, которая описывает будущие документы.
+module.exports = mongoose.model("card", cardSchema); // Мы передали методу mongoose.model два аргумента: имя модели и схему, которая описывает будущие документы.
