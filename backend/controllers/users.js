@@ -128,10 +128,11 @@ const login = (req, res, next) => {
       } else {
         bcrypt.compare(password, user.password, (error, isValid) => {
           if (error) {
-            throw new BadRequest("Неверный запрос");
+            // throw new BadRequest("Неверный запрос");
+            return next(new BadRequest("Неверный запрос"));
           }
           if (!isValid) {
-            //throw new BadAuth("Неправильный пароль");
+            // throw new BadAuth("Неправильный пароль");
             return next(new BadAuth("Неправильный пароль"));
           }
           if (isValid) {
