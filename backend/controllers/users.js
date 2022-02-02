@@ -124,7 +124,7 @@ const login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new BadAuth('Нет пользователя с таким id');
+        throw new BadAuth('Нет пользователя с таким email');
       } else {
         bcrypt.compare(password, user.password, (error, isValid) => {
           if (error) {
