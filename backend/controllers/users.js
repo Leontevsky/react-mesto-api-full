@@ -80,11 +80,11 @@ const getUser = (req, res, next) => {
 const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
-  // if (!email || !password) {
-  //   res.status(400).send({
-  //     message: 'Email или пароль могут быть пустыми',
-  //   });
-  // }
+  if (!email || !password) {
+    res.status(400).send({
+      message: 'Email или пароль могут быть пустыми',
+    });
+  }
   User.findOne({ email }).then((user) => {
     if (user) {
       throw new BadUnique('Пользователь существует');
