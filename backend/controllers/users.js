@@ -64,7 +64,7 @@ const createUser = (req, res, next) => {
                   throw new BadRequest(
                     "Переданы некорректные данные в методы создания пользователя",
                   );
-                } else if (err.codeName === "DuplicateKey") {
+                } if (err.codeName === "DuplicateKey") {
                   throw new BadUnique("Пользователь с таким email уже существует");
                 } else {
                   next(err);
