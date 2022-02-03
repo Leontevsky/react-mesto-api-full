@@ -39,39 +39,37 @@ const createUser = (req, res, next) => {
   } = req.body;
 
   if (!email || !password) {
-    throw new BadRequest("Email или пароль могут быть пустыми");
+    res.status(400).send({
+      message: "Email или пароль могут быть пустыми",
+    });
   }
   User.findOne({ email })
     .then((user) => {
       if (user) {
         throw new BadUnique("Пользователь существует");
       } else {
-        bcrypt.hash(password, 10).then((hash) => {
-          User.create({
-            name,
-            about,
-            avatar,
-            email,
-            password: hash,
-          })
-            .catch((err) => {
-              if (err.name === "MongoError" && err.code === 11000) {
-                throw new BadUnique(
-                  "Пользователь с таким email уже существует",
-                );
-              }
+        bcrypt
+          .hash(password, 10)
+          .then((hash) => {
+            User.create({
+              name,
+              about,
+              avatar,
+              email,
+              password: hash,
             })
-            .then((currentUser) => res.status(200).send({ currentUser: currentUser.toJSON() }))
-            .catch((err) => {
-              if (err.name === "ValidationError") {
-                throw new BadRequest(
-                  "Переданы некорректные данные в методы создания пользователя",
-                );
-              } else {
-                next(err);
-              }
-            });
-        }).catch(next);
+              .then((currentUser) => res.status(200).send({ currentUser: currentUser.toJSON() }))
+              .catch((err) => {
+                if (err.name === "ValidationError") {
+                  throw new BadRequest(
+                    "Переданы некорректные данные в методы создания пользователя",
+                  );
+                } else {
+                  next(err);
+                }
+              });
+          })
+          .catch(next);
       }
     })
     .catch(next);
