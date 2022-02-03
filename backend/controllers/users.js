@@ -33,6 +33,50 @@ const getUser = (req, res, next) => {
     .catch(next);
 };
 
+// const createUser = (req, res, next) => {
+//   const {
+//     name, about, avatar, email, password,
+//   } = req.body;
+
+//   if (!email || !password) {
+//     res.status(400).send({
+//       message: "Email или пароль могут быть пустыми",
+//     });
+//   }
+//   User.findOne({ email })
+//     .then((user) => {
+//       if (user) {
+//         throw new BadUnique("Пользователь существует");
+//       } else {
+//         bcrypt
+//           .hash(password, 10)
+//           .then((hash) => {
+//             User.create({
+//               name,
+//               about,
+//               avatar,
+//               email,
+//               password: hash,
+//             })
+//               .then((currentUser) => res.status(200).send({ currentUser: currentUser.toJSON() }))
+//               .catch((err) => {
+//                 if (err.name === "ValidationError") {
+//                   throw new BadRequest(
+//                     "Переданы некорректные данные в методы создания пользователя",
+//                   );
+//                 } if (err.codeName === "DuplicateKey") {
+//                   throw new BadUnique("Пользователь с таким email уже существует");
+//                 } else {
+//                   next(err);
+//                 }
+//               });
+//           })
+//           .catch(next);
+//       }
+//     })
+//     .catch(next);
+// };;
+// Пользователь
 const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
@@ -61,11 +105,11 @@ const createUser = (req, res, next) => {
               .then((currentUser) => res.status(200).send({ currentUser: currentUser.toJSON() }))
               .catch((err) => {
                 if (err.name === "ValidationError") {
-                  throw new BadRequest(
+                  next(new BadRequest(
                     "Переданы некорректные данные в методы создания пользователя",
-                  );
-                } if (err.codeName === "DuplicateKey") {
-                  throw new BadUnique("Пользователь с таким email уже существует");
+                  ));
+                } if (err.name === 'MongoError' && err.code === 11000) {
+                  next(new BadUnique("Пользователь с таким email уже существует"));
                 } else {
                   next(err);
                 }
