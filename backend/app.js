@@ -72,7 +72,7 @@ app.use(handleError);
 
 // Прослушиваем подключение на порту 3000
 app.listen(PORT, () => {
-  // console.log('Ссылка на сервер:');
+   console.log('Ссылка на сервер');
   // console.log(BASE_PATH);
   // console.log(`Приложение App слушает порт: ${PORT}`);
 });

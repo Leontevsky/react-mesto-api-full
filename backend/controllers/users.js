@@ -81,40 +81,25 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-
-  User.findOne({ email }).then((user) => {
-    if (user) {
-      throw new BadUnique("Пользователь существует");
-    } else {
-      bcrypt
-        .hash(password, 10)
-        .then((hash) => {
-          User.create({
-            name,
-            about,
-            avatar,
-            email,
-            password: hash,
-          })
-            .then((currentUser) => res.status(200).send({ currentUser: currentUser.toJSON() }))
-            .catch((err) => {
-
-              if (err.name === "MongoError" && err.code === 11000) {
-                next(new BadUnique("Пользователь с таким email уже существует"));
-              }
-
-              if (err.name === "ValidationError") {
-                next(new BadRequest("Переданы некорректные данные в методы создания пользователя"));
-              }
-               else {
-                next(err);
-              }
-            });
-        })
-        .catch(next);
-    }
-  });
-  // .catch(next);
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
+    .then((currentUser) => res.status(200).send({ currentUser: currentUser.toJSON() }))
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new BadUnique("Пользователь с таким email уже зарегестрирован"));
+      }
+      if (err.name === "ValidationError") {
+        next(new BadRequest("Переданы некорректные данные в методы создания пользователя"));
+      }
+      next(err);
+    });
 };
 
 const updateProfile = (req, res, next) => {
