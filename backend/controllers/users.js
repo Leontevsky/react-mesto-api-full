@@ -64,8 +64,8 @@ const createUser = (req, res, next) => {
                   throw new BadRequest(
                     "Переданы некорректные данные в методы создания пользователя",
                   );
-                } else {
-                  next(err);
+                } else if (err.code === 11000) {
+                  next(new BadUnique("Пользователь существует"));
                 }
               });
           })
